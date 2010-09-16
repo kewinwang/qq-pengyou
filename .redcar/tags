@@ -1,0 +1,15 @@
+1284631647
+PYO_ERROR_CURL	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	PYO_ERROR_CURL =
+PYO_ERROR_REQUIRED_PARAMETER_EMPTY	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	PYO_ERROR_REQUIRED_PARAMETER_EMPTY =
+PYO_ERROR_REQUIRED_PARAMETER_INVALID	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	PYO_ERROR_REQUIRED_PARAMETER_INVALID =
+PYO_ERROR_RESPONSE_DATA_INVALID	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	PYO_ERROR_RESPONSE_DATA_INVALID =
+QQPengyou	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	class QQPengyou
+VERSION	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	  VERSION =
+api	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	  def api
+get_api_path	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	  def get_api_path
+get_friend_list	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	  def get_friend_list
+get_user_info	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	  def get_user_info
+initialize	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	  def initialize
+is_friend	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	  def is_friend
+make_request	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	  def make_request
+valid_open_id?	/home/jason/work/qq-pengyou/lib/qq-pengyou.rb	    def valid_open_id?

@@ -1,0 +1,11 @@
+腾讯社区开放平台作为社交型应用的开发接入平台，提供了一系列的开放接口（Open API）和开发工具包（SDK），广大开发者只要登录平台网站并创建应用，就可以通过Open API获取登录用户信息、用户签名信息以及好友关系链信息等。已上线的应用还可以调用支付和监控接口，实现支付功能，查看应用实时运维数据。
+
+此项目是 腾讯官方SDK的 Ruby 实现。
+
+http://opensns.qq.com/apps/wiki
+
+h1. Install
+
+  $ gem install json
+  $ sudo aptitude install libcurl4-openssl-dev
+  $ gem install curb

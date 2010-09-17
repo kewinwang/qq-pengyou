@@ -4,5 +4,12 @@
 
 http://opensns.qq.com/apps/wiki
 
-Install
+= 如何安装
 
+  $ gem install qq-pengyou
+
+= 使用说明
+
+接口参数基本和腾讯官方那个 PHP 的 SDK 一样，只是有效部分函数命名改为了 Ruby 风格。
+详细的函数说明: 
+  http://rubydoc.info/github/huacnlee/qq-pengyou/master/QQPengyou

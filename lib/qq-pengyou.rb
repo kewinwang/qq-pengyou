@@ -1,3 +1,4 @@
+# coding: utf-8  
 require 'rubygems'
 require 'json'
 require 'net/http'
@@ -23,9 +24,9 @@ class QQPengyou
 
   # 构造函数
   # 参数:
-  #   app_id 应用的唯一ID
-  #   app_key 应用的密钥，用于验证应用的合法性
-  #   app_name 应用的英文名(唯一)
+  #   - app_id : 应用的唯一ID
+  #   - app_key : 应用的密钥，用于验证应用的合法性
+  #   - app_name : 应用的英文名(唯一)
   def initialize(app_id,app_key,app_name)
     @server_name = 'openapi.pengyou.qq.com'
     @app_id = app_id
@@ -68,8 +69,8 @@ class QQPengyou
   private
   # 执行一个 HTTP POST 请求, 返回结果数组。可能发生cURL错误
   # 参数:
-  #   path 执行请求的路径
-  #   options 表单参数
+  #   - path : 执行请求的路径
+  #   - options : 表单参数
   def make_request(path,options = {})
     http = Net::HTTP.new("#{@server_name}")
     query_params = options.collect { |v| v.join("=") }.join("&")    
@@ -100,15 +101,15 @@ class QQPengyou
   public
   # 返回当前登录用户信息
   # return hash
-	#		:ret  返回码 (0:正确返回, [1000,~]错误)
-	#		:nickname  昵称
-	#		:gender  性别
-	#		:province  省
-	#		:city  市
-	#		:figureurl  头像url
-	#		:is_vip  是否黄钻用户 (true|false)
-	#		:is_year_vip  是否年费黄钻(如果is_vip为false, 那is_year_vip一定是false)
-  #   :vip_level  黄钻等级(如果是黄钻用户才返回此字段)      
+	#		- ret : 返回码 (0:正确返回, [1000,~]错误)
+	#		- nickname : 昵称
+	#		- gender : 性别
+	#		- province : 省
+	#		- city : 市
+	#		- figureurl : 头像url
+	#		- is_vip : 是否黄钻用户 (true|false)
+	#		- is_year_vip : 是否年费黄钻(如果is_vip为false, 那is_year_vip一定是false)
+  #   - vip_level : 黄钻等级(如果是黄钻用户才返回此字段)      
   def get_user_info(openid,openkey)
     return api('xyoapp_get_userinfo',:openid => openid, :openkey => openkey)
   end
@@ -120,8 +121,8 @@ class QQPengyou
 	#    options Hash 值
 	#    		fopenid  待验证用户的openid
   # 返回值(Hash):
-  #    :ret   返回码 (0:正确返回, [1000,~]错误)
-  #    :isFriend   是否为好友(0:不是好友; 1:是好友; 2:是同班同学)
+  #    - ret  : 返回码 (0:正确返回, [1000,~]错误)
+  #    - isFriend  : 是否为好友(0:不是好友; 1:是好友; 2:是同班同学)
   def is_friend(openid,openkey, options = {})
     if not QQPengyou.valid_open_id?(options[:fopenid])
       return {:ret => PYO_ERROR_REQUIRED_PARAMETER_INVALID, :msg => 'fopenid is invalid' }
@@ -157,4 +158,73 @@ class QQPengyou
         :apped => apped,
         :page => page)
   end
+  
+  # 批量获取用户详细信息
+  # 参数:
+  #   - :fopenids : Array 需要获取数据的openid列表
+  # 返回 HASH 好友详细信息数组:
+	#		- ret : 返回码 (0:正确返回; (0,1000):部分数据获取错误,相当于容错的返回; [1000,~]错误)
+	#		- items : array 用户信息
+	#		- openid : 好友的 OPENID
+  #   - nickname :昵称
+	#		- gender : 性别
+	#		- figureurl : 头像url
+	#		- is_vip : 是否黄钻 (true:黄钻; false:普通用户)
+	#		- is_year_vip : 是否年费黄钻 (is_vip为true才显示)
+	#		- vip_level : 黄钻等级 (is_vip为true才显示)
+  def get_multi_info(openid, openkey, options = {})
+    fopenids = options[:fopenids]
+    if fopenids == nil or fopenids.class != [].class
+      return { :ret => PYO_ERROR_REQUIRED_PARAMETER_EMPTY, :msg => 'fopenids is empty or not a Array type.' }
+    end
+    
+    return api('xyoapp_multi_info',
+                :openid => openid,
+                :openkey => openkey,
+                :fopenids => fopenids.join("_"))
+  end
+  
+  # 验证登录用户是否安装了应用
+  # 返回值 hash:
+  #   - ret : 返回码 (0:正确返回, [1000,~]错误)
+	#		- setuped : 是否安装(0:没有安装;1:安装)
+  def setuped?(openid, openkey)
+    return api('xyoapp_get_issetuped',
+                :openid => openid,
+                :openkey => openkey)
+  end
+  
+  # 判断用户是否为黄钻
+  # 返回值 hash:
+  #   - ret : 返回码 (0:正确返回, [1000,~]错误)
+  #		- is_vip : 是否黄钻 (true:黄钻; false:普通用户)   
+  def vip?(openid, openkey)
+    return api('xyoapp_pay_showvip',
+                :openid => openid,
+                :openkey => openkey)
+  end
+  
+  # 获取好友的签名信息
+  # 参数:
+  #   - openid
+  #   - openkey
+  #   - :fopenids : Array 需要获取数据的openid列表(一次最多20个)
+  # 返回值 HASH:
+  #   - ret : 返回码 (0:正确返回; (0,1000):部分数据获取错误,相当于容错的返回; [1000,~]错误)
+	#		- items : Array 用户信息
+	#		- openid: 好友QQ号码转化得到的id
+	#		- content: 好友的校友心情内容
+  def get_emotion(openid, openkey, options = {})
+    fopenids = options[:fopenids]
+    if fopenids == nil or fopenids.class != [].class
+      return { :ret => PYO_ERROR_REQUIRED_PARAMETER_EMPTY, :msg => 'fopenids is empty or not a Array type.' }
+    end
+    
+    
+    return api('xyoapp_get_emotion',
+                :openid => openid,
+                :openkey => openkey,
+                :fopenids => fopenids.join("_"))
+  end
+  
 end

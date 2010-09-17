@@ -4,8 +4,5 @@
 
 http://opensns.qq.com/apps/wiki
 
-h1. Install
+Install
 
-  $ gem install json
-  $ sudo aptitude install libcurl4-openssl-dev
-  $ gem install curb
